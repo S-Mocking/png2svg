@@ -8,7 +8,7 @@ from collections import deque
 from StringIO import StringIO
 from optparse import OptionParser
 
-import Image
+from PIL import Image
 
 
 
@@ -157,13 +157,14 @@ def rgba_image_to_svg_contiguous(im, opaque=None, keep_every_point=False):
     for rgba, pieces in color_pixel_lists.items():
         for piece_pixel_list in pieces:
             edge_set = set([])
+            piece_pixel_list_d = dict.fromkeys(piece_pixel_list, 0)
             for coord in piece_pixel_list:
                 for offset, (start_offset, end_offset) in edges.items():
                     neighbour = add_tuple(coord, offset)
                     start = add_tuple(coord, start_offset)
                     end = add_tuple(coord, end_offset)
                     edge = (start, end)
-                    if neighbour in piece_pixel_list:
+                    if neighbour in piece_pixel_list_d:
                         continue
                     edge_set.add(edge)
             if not rgba in color_edge_lists:
